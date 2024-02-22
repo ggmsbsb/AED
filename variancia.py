@@ -23,6 +23,10 @@ def calcular_coeficiente_variacao(desvio_padrao=None, media=None, valores=None):
 
     return coeficiente_variacao
 
+def calcular_amplitude(valores):
+    amplitude = max(valores) - min(valores)
+    return amplitude
+
 def user_input():
     try:
         n = int(input("Numero de valores: "))
@@ -48,10 +52,12 @@ def main():
         desvio_padrao = calcular_desvio_padrao(variancia)
         media = sum(valores) / len(valores)
         coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
+        amplitude = calcular_amplitude(valores)
 
         print(f"\nVariance: {variancia}")
         print(f"Desvio Padrão: {desvio_padrao}")
         print(f"Média: {media}")
+        print(f"Amplitude: {amplitude}")
         print(f"Coeficiente de variação: {coeficiente_variacao:.2f}%")
     else:
         print("Digitou errado")
