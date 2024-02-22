@@ -42,14 +42,14 @@ def calcular_intervalo_confianca(resultados_tukeyhsd, confianca=0.95):
     return intervalos_confianca
 
 
-def user_input():
+def user_input(grupo):
     try:
-        n = int(input("Numero de valores: "))
+        n = int(input(f"Numero de valores para o Grupo {grupo}: "))
         valores = [float(input(f"Valor {i+1}: ")) for i in range(n)]
         return valores
     except ValueError:
         print("Verificar número inserido.")
-        return user_input()
+        return user_input(grupo)
 
 def main():
     escolha = input("Escolha uma opção:\n1 - Calcular variância, desvio padrão, média e amplitude.\n2 - Calcular o coeficiente de variação.\n3 - ANOVA.\n").strip()
@@ -75,7 +75,7 @@ def main():
 
     elif escolha == '3':
         numero_grupos = int(input("Número de grupos (mínimo 2): "))
-        grupos = [user_input() for _ in range(numero_grupos)]
+        grupos = [user_input(i + 1) for i in range(numero_grupos)]  # Adicionado um índice para mostrar o número do grupo
         anova_resultado = realizar_anova(grupos)
 
         print("\nResultados da ANOVA:")
@@ -94,7 +94,9 @@ def main():
         intervalo_confianca = calcular_intervalo_confianca(resultados_tukeyhsd, confianca)
         for i, diff in enumerate(resultados_tukeyhsd.meandiffs):
             intervalo = intervalo_confianca[i]
-            print(f"Diferença entre Grupo {resultados_tukeyhsd.groupsunique[i][0]} e Grupo {resultados_tukeyhsd.groupsunique[i][1]}: {diff:.2f} (Intervalo de Confiança: {intervalo})")
+            grupo1 = resultados_tukeyhsd.groupsunique[i][0]
+            grupo2 = resultados_tukeyhsd.groupsunique[i][1]
+            print(f"Diferença entre Grupo {grupo1} e Grupo {grupo2}: {diff:.2f} (Intervalo de Confiança: {intervalo})")
 
     else:
         print("Opção inválida. Escolha 1, 2 ou 3.")
