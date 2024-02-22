@@ -16,7 +16,12 @@ def calcular_coeficiente_variacao(desvio_padrao=None, media=None, valores=None):
     
     if media == 0:
         return 0
-    return (desvio_padrao / media ) * 100
+    coeficiente_variacao = (desvio_padrao / media ) * 100
+
+    if coeficiente_variacao < 1:
+        coeficiente_variacao *= 100
+
+    return coeficiente_variacao
 
 def user_input():
     try:
@@ -28,27 +33,28 @@ def user_input():
         return user_input()
     
 def main():
-    # Se você quiser inserir diretamente desvio padrão e média:
-    desvio_padrao = float(input("Standard Deviation: "))
-    media = float(input("Mean: "))
-    coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
+    # Escolha entre inserir diretamente desvio padrão e média ou usar conjunto de dados
+    escolha = input("Já tem os valores do desvio padrão e média? (S/N): ").strip().lower()
 
-    print(f"\nStandard Deviation: {desvio_padrao}")
-    print(f"Mean: {media}")
-    print(f"Coefficient of Variation: {coeficiente_variacao}%")
+    if escolha == 's':
+        desvio_padrao = float(input("Desvio Padrão: "))
+        media = float(input("Média: "))
+        coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
 
-    # Se você quiser inserir diretamente os valores e calcular tudo:
-    # valores = get_user_input()
-    # variancia = calcular_variancia(valores)
-    # desvio_padrao = calcular_desvio_padrao(variancia)
-    # media = sum(valores) / len(valores)
-    # coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
+        print(f"Coeficiente de variação: {coeficiente_variacao:.2f}%")
+    elif escolha == 'n':
+        valores = user_input()
+        variancia = calcular_variancia(valores)
+        desvio_padrao = calcular_desvio_padrao(variancia)
+        media = sum(valores) / len(valores)
+        coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
 
-    # print(f"\nVariance: {variancia}")
-    # print(f"Standard Deviation: {desvio_padrao}")
-    # print(f"Mean: {media}")
-    # print(f"Coefficient of Variation: {coeficiente_variacao}%")
-
+        print(f"\nVariance: {variancia}")
+        print(f"Desvio Padrão: {desvio_padrao}")
+        print(f"Média: {media}")
+        print(f"Coeficiente de variação: {coeficiente_variacao:.2f}%")
+    else:
+        print("Digitou errado")
 
 if __name__ == "__main__":
     main()
