@@ -41,61 +41,63 @@ def calcular_intervalo_confianca(resultados_tukeyhsd, confianca=0.95):
 
     return intervalos_confianca
 
-def user_input(numero_grupo):
+
+def user_input():
     try:
-        n = int(input(f"Numero de valores para Grupo {numero_grupo}: "))
+        n = int(input("Numero de valores: "))
         valores = [float(input(f"Valor {i+1}: ")) for i in range(n)]
         return valores
     except ValueError:
         print("Verificar número inserido.")
-        return user_input(numero_grupo)
+        return user_input()
 
 def main():
-    escolha = input("Já tem os valores do desvio padrão e média? (S/N): ").strip().lower()
+    escolha = input("Escolha uma opção:\n1 - Calcular variância, desvio padrão, média e amplitude.\n2 - Calcular o coeficiente de variação.\n3 - ANOVA.\n").strip()
 
-    grupo1 = user_input(1)
-    grupo2 = user_input(2)
-    grupo3 = user_input(3)
+    if escolha == '1':
+        numero_grupos = int(input("Número de grupos: "))
+        for i in range(numero_grupos):
+            grupo = user_input()
+            variancia = calcular_variancia(grupo)
+            desvio_padrao = calcular_desvio_padrao(variancia)
+            media = np.mean(grupo)
+            coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
+            amplitude = calcular_amplitude(grupo)
 
-    variancia_grupo1 = calcular_variancia(grupo1)
-    desvio_padrao_grupo1 = calcular_desvio_padrao(variancia_grupo1)
-    media_grupo1 = np.mean(grupo1)
-    coeficiente_variacao_grupo1 = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao_grupo1, media=media_grupo1)
-    amplitude_grupo1 = calcular_amplitude(grupo1)
+            print(f"\nGrupo {i + 1} - Variância: {variancia}, Desvio Padrão: {desvio_padrao}, Média: {media}, Coeficiente de Variação: {coeficiente_variacao:.2f}%, Amplitude: {amplitude}")
 
-    variancia_grupo2 = calcular_variancia(grupo2)
-    desvio_padrao_grupo2 = calcular_desvio_padrao(variancia_grupo2)
-    media_grupo2 = np.mean(grupo2)
-    coeficiente_variacao_grupo2 = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao_grupo2, media=media_grupo2)
-    amplitude_grupo2 = calcular_amplitude(grupo2)
+    elif escolha == '2':
+        desvio_padrao = float(input("Desvio Padrão: "))
+        media = float(input("Média: "))
+        coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
 
-    variancia_grupo3 = calcular_variancia(grupo3)
-    desvio_padrao_grupo3 = calcular_desvio_padrao(variancia_grupo3)
-    media_grupo3 = np.mean(grupo3)
-    coeficiente_variacao_grupo3 = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao_grupo3, media=media_grupo3)
-    amplitude_grupo3 = calcular_amplitude(grupo3)
+        print(f"Coeficiente de variação: {coeficiente_variacao:.2f}%")
 
-    anova_resultado = realizar_anova([grupo1, grupo2, grupo3])
-    
-    print(f"\nGrupo 1 - Variância: {variancia_grupo1}, Desvio Padrão: {desvio_padrao_grupo1}, Média: {media_grupo1}, Coeficiente de Variação: {coeficiente_variacao_grupo1:.2f}%, Amplitude: {amplitude_grupo1}")
-    print(f"\nGrupo 2 - Variância: {variancia_grupo2}, Desvio Padrão: {desvio_padrao_grupo2}, Média: {media_grupo2}, Coeficiente de Variação: {coeficiente_variacao_grupo2:.2f}%, Amplitude: {amplitude_grupo2}")
-    print(f"\nGrupo 3 - Variância: {variancia_grupo3}, Desvio Padrão: {desvio_padrao_grupo3}, Média: {media_grupo3}, Coeficiente de Variação: {coeficiente_variacao_grupo3:.2f}%, Amplitude: {amplitude_grupo3}")
+    elif escolha == '3':
+        numero_grupos = int(input("Número de grupos (mínimo 2): "))
+        grupos = [user_input() for _ in range(numero_grupos)]
+        anova_resultado = realizar_anova(grupos)
 
-    print("\nResultados da ANOVA:")
-    print(f"Valor-p: {anova_resultado.pvalue}")
-    print("Conclusão: Os grupos têm médias significativamente diferentes." if anova_resultado.pvalue < 0.05 else "Conclusão: Não há diferença significativa entre as médias dos grupos.")
+        print("\nResultados da ANOVA:")
+        print(f"Valor-p: {anova_resultado.pvalue}")
+        print(f"Valor F: {anova_resultado.statistic}")
 
-    # Realizar comparações múltiplas e calcular intervalos de confiança usando Tukey HSD
-    dados_combinados = np.concatenate([grupo1, grupo2, grupo3])
-    rotulos_grupos = ['Grupo 1'] * len(grupo1) + ['Grupo 2'] * len(grupo2) + ['Grupo 3'] * len(grupo3)
-    resultados_tukeyhsd = pairwise_tukeyhsd(dados_combinados, rotulos_grupos)
+        print("Conclusão: Os grupos têm médias significativamente diferentes." if anova_resultado.pvalue < 0.05 else "Conclusão: Não há diferença significativa entre as médias dos grupos.")
 
-    print("\nIntervalo de Confiança para as Diferenças entre Grupos:")
-    confianca = float(input("Nível de confiança (entre 0 e 1): "))
-    intervalo_confianca = calcular_intervalo_confianca(resultados_tukeyhsd, confianca)
-    for i, diff in enumerate(resultados_tukeyhsd.meandiffs):
-        intervalo = intervalo_confianca[i]
-        print(f"Diferença entre Grupo {resultados_tukeyhsd.groupsunique[i][0]} e Grupo {resultados_tukeyhsd.groupsunique[i][1]}: {diff:.2f} (Intervalo de Confiança {confianca * 100}%: {intervalo})")
+        # Realizar comparações múltiplas e calcular intervalos de confiança usando Tukey HSD
+        dados_combinados = np.concatenate(grupos)
+        rotulos_grupos = [f'Grupo {i+1}' for i in range(numero_grupos) for _ in grupos[i]]
+        resultados_tukeyhsd = pairwise_tukeyhsd(dados_combinados, rotulos_grupos)
+
+        print("\nIntervalo de Confiança para as Diferenças entre Grupos:")
+        confianca = float(input("Nível de confiança (entre 0 e 1): "))
+        intervalo_confianca = calcular_intervalo_confianca(resultados_tukeyhsd, confianca)
+        for i, diff in enumerate(resultados_tukeyhsd.meandiffs):
+            intervalo = intervalo_confianca[i]
+            print(f"Diferença entre Grupo {resultados_tukeyhsd.groupsunique[i][0]} e Grupo {resultados_tukeyhsd.groupsunique[i][1]}: {diff:.2f} (Intervalo de Confiança: {intervalo})")
+
+    else:
+        print("Opção inválida. Escolha 1, 2 ou 3.")
 
 if __name__ == "__main__":
     main()
