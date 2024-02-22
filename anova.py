@@ -95,7 +95,7 @@ def main():
     intervalo_confianca = calcular_intervalo_confianca(resultados_tukeyhsd, confianca)
     for i, diff in enumerate(resultados_tukeyhsd.meandiffs):
         intervalo = intervalo_confianca[i]
-        print(f"Diferença entre Grupo {resultados_tukeyhsd.groupsunique[i][0]} e Grupo {resultados_tukeyhsd.groupsunique[i][1]}: {diff:.2f} (Intervalo de Confiança: {intervalo})")
+        print(f"Diferença entre Grupo {resultados_tukeyhsd.groupsunique[i][0]} e Grupo {resultados_tukeyhsd.groupsunique[i][1]}: {diff:.2f} (Intervalo de Confiança {confianca * 100}%: {intervalo})")
 
 if __name__ == "__main__":
     main()
