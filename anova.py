@@ -32,7 +32,7 @@ def calcular_amplitude(valores):
 def realizar_anova(grupos):
     return f_oneway(*grupos)
 
-def calcular_intervalo_confianca(resultados_tukeyhsd, confianca):
+def calcular_intervalo_confianca(resultados_tukeyhsd, confianca=0.95):
     intervalos_confianca = []
 
     for i, diff in enumerate(resultados_tukeyhsd.meandiffs):
@@ -41,21 +41,21 @@ def calcular_intervalo_confianca(resultados_tukeyhsd, confianca):
 
     return intervalos_confianca
 
-def user_input():
+def user_input(numero_grupo):
     try:
-        n = int(input("Numero de valores: "))
+        n = int(input(f"Numero de valores para Grupo {numero_grupo}: "))
         valores = [float(input(f"Valor {i+1}: ")) for i in range(n)]
         return valores
     except ValueError:
         print("Verificar número inserido.")
-        return user_input()
+        return user_input(numero_grupo)
 
 def main():
     escolha = input("Já tem os valores do desvio padrão e média? (S/N): ").strip().lower()
 
-    grupo1 = user_input()
-    grupo2 = user_input()
-    grupo3 = user_input()
+    grupo1 = user_input(1)
+    grupo2 = user_input(2)
+    grupo3 = user_input(3)
 
     variancia_grupo1 = calcular_variancia(grupo1)
     desvio_padrao_grupo1 = calcular_desvio_padrao(variancia_grupo1)
