@@ -96,6 +96,7 @@ def main():
             intervalo = intervalo_confianca[i]
             grupo1 = resultados_tukeyhsd.groupsunique[i][0]
             grupo2 = resultados_tukeyhsd.groupsunique[i][1]
+            #Arrumar isso aq
             print(f"Diferença entre Grupo {grupo1} e Grupo {grupo2}: {diff:.2f} (Intervalo de Confiança: {intervalo})")
 
     else:
