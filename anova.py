@@ -3,14 +3,17 @@ import numpy as np
 from scipy.stats import f_oneway
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
+# Menu 1 -- Variancia
 def calcular_variancia(valores):
     media = sum(valores) / len(valores)
     variancia = sum((x - media) ** 2 for x in valores) / len(valores)
     return variancia
 
+# Menu 2 -- DV
 def calcular_desvio_padrao(variancia):
     return math.sqrt(variancia)
-
+    
+# Menu 2 -- DV
 def calcular_coeficiente_variacao(desvio_padrao=None, media=None, valores=None):
     if valores is not None:
         media = sum(valores) / len(valores)
@@ -25,10 +28,12 @@ def calcular_coeficiente_variacao(desvio_padrao=None, media=None, valores=None):
 
     return coeficiente_variacao
 
+# Menu 2 -- DV
 def calcular_amplitude(valores):
     amplitude = max(valores) - min(valores)
     return amplitude
 
+# Menu 3 -- ANOVA | 
 def realizar_anova(grupos):
     return f_oneway(*grupos)
 
@@ -41,7 +46,7 @@ def calcular_intervalo_confianca(resultados_tukeyhsd, confianca=0.95):
 
     return intervalos_confianca
 
-
+# Input usuário
 def user_input(grupo):
     try:
         n = int(input(f"Numero de valores para o Grupo {grupo}: "))
@@ -51,11 +56,12 @@ def user_input(grupo):
         print("Verificar número inserido.")
         return user_input(grupo)
 
+# Programa principal
 def main():
     escolha = input("Escolha uma opção:\n1 - Calcular variância, desvio padrão, média e amplitude.\n2 - Calcular o coeficiente de variação.\n3 - ANOVA.\n").strip()
 
     if escolha == '1':
-        numero_grupos = int(input("Número de grupos: "))
+        numero_grupos = int(input("Número de grupos: ")) # Linha desnecessária, verificar remoção. //1
         for i in range(numero_grupos):
             grupo = user_input()
             variancia = calcular_variancia(grupo)
@@ -64,7 +70,7 @@ def main():
             coeficiente_variacao = calcular_coeficiente_variacao(desvio_padrao=desvio_padrao, media=media)
             amplitude = calcular_amplitude(grupo)
 
-            print(f"\nGrupo {i + 1} - Variância: {variancia}, Desvio Padrão: {desvio_padrao}, Média: {media}, Coeficiente de Variação: {coeficiente_variacao:.2f}%, Amplitude: {amplitude}")
+            print(f"\nGrupo {i + 1} - Variância: {variancia}, Desvio Padrão: {desvio_padrao}, Média: {media}, Coeficiente de Variação: {coeficiente_variacao:.2f}%, Amplitude: {amplitude}") # //1
 
     elif escolha == '2':
         desvio_padrao = float(input("Desvio Padrão: "))
