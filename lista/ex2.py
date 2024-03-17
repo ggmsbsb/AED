@@ -6,7 +6,8 @@ df = read_excel()
 #print(df)
 
 def moda(df):
-    moda = df['Cotacao'].mode()
+    #moda = df['Cotacao'].mode().iloc[1]
+    moda = df['Cotacao'].mode().tolist()
     return moda
 
 def mediana(df):
