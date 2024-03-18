@@ -1,7 +1,7 @@
 import numpy as np
 
 #Import da planilha
-from excel import read_excel
+from dolar import read_excel
 df = read_excel()
 #print(df)
 
