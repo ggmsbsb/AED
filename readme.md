@@ -1,4 +1,11 @@
-Este é um GIT da disciplina <span style="color:red">Análise estatística de dados</span>.
+Este é um GIT da disciplina `Análise estatística de dados`.
+
+<style>
+.git-text {
+    color: red;
+}
+</style>
+
 
 Bibliotecas utilizadas nos exercícios:
 
