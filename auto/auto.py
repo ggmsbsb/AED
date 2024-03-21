@@ -27,8 +27,20 @@ bibliotecas_utilizadas = sorted(list(bibliotecas_utilizadas))
 # Formata as bibliotecas para o formato Markdown
 bibliotecas_formatadas = "  - " + "\n  - ".join(bibliotecas_utilizadas)
 
-# Atualiza o README.md
-with open(readme_file, "a", encoding="utf-8") as readme:  # Especifica a codificação como UTF-8
+# Lê o conteúdo atual do README.md
+with open(readme_file, "r", encoding="utf-8") as readme:
+    linhas = readme.readlines()
+
+# Remove a seção das bibliotecas utilizadas
+with open(readme_file, "w", encoding="utf-8") as readme:
+    for linha in linhas:
+        if linha.strip() == "Este é um GIT da disciplina Análise estatística de dados.":
+            readme.write(linha)
+            break
+        readme.write(linha)
+
+# Adiciona as novas informações sobre as bibliotecas utilizadas
+with open(readme_file, "a", encoding="utf-8") as readme:
     readme.write("\nBibliotecas utilizadas nos exercícios:\n\n")
     readme.write(bibliotecas_formatadas)
     readme.write("\n")
