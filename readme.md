@@ -1,7 +1,8 @@
-Este é um GIT da disciplina Análise estatística de dados.
+Este é um GIT da disciplina <span style="color:red">Análise estatística de dados</span>.
 
 Bibliotecas utilizadas nos exercícios:
 
+  - Axes3D
   - dolar
   - indice
   - json
