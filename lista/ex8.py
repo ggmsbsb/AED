@@ -44,21 +44,31 @@ def main():
     """
     Função principal para obter entradas do usuário e calcular o coeficiente de correlação de Pearson.
     """
-    n = int(input("Quantos pares de números? "))
-    if n <= 0:
-        print("Número de caracteres invalidos.")
-        return
-    x_values = []
-    y_values = []
+    while True:
+        n = int(input("Quantos pares de números você deseja inserir? "))
+        
+        if n == 0:
+            print("O número de pares de números não pode ser 0. Por favor, insira um valor válido.")
+            continue
+        elif n < 0:
+            print("O número de pares de números deve ser um valor positivo. Por favor, insira um valor válido.")
+            continue
 
-    for i in range(n):
-        x = float(input("Digite o valor de x{}: ".format(i + 1)))
-        y = float(input("Digite o valor de y{}: ".format(i + 1)))
-        x_values.append(x)
-        y_values.append(y)
+        x_values = []
+        y_values = []
 
-    correlacao = pearson_r(x_values, y_values)
-    print("O coeficiente de correlação de Pearson entre os conjuntos de dados é:", correlacao)
+        for i in range(n):
+            x = float(input("Digite o valor de x{}: ".format(i + 1)))
+            y = float(input("Digite o valor de y{}: ".format(i + 1)))
+            x_values.append(x)
+            y_values.append(y)
+
+        correlacao = pearson_r(x_values, y_values)
+        print("O coeficiente de correlação de Pearson entre os conjuntos de dados é:", correlacao)
+
+        continuar = input("Denovo? ")
+        if continuar.lower() != 's':
+            break
 
 if __name__ == "__main__":
     main()
